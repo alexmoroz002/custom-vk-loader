@@ -12,29 +12,23 @@
         style="@style/TextAppearance.Material3.HeadlineMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My albums"
-        app:layout_constraintBottom_toBottomOf="@+id/retry_button"
+        android:layout_marginTop="16dp"
+        android:text="VK Gallery Loader"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/retry_button" />
-
-    <Button
-        android:id="@+id/retry_button"
-        style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:tooltipText="Update"
-        app:icon="@drawable/baseline_restart_alt_24"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/albums_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+    <Button
+        android:id="@+id/loginButton"
+        style="@style/Widget.Material3.Button"
+        app:icon="@drawable/vk_logo"
+        app:iconTint="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login with VK"
+        app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/retry_button" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
