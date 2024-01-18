@@ -1,8 +1,8 @@
 package com.example.vkloader
 
 class Album(
+    var id: Int,
     var title: String,
     var count: Int,
-    var url: String,
-    var coverUrl: String
+    var coverUrl: String?
 )

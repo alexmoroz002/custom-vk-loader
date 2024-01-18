@@ -6,17 +6,36 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Button
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import com.google.android.material.snackbar.Snackbar
+import com.vk.api.sdk.VK
+import com.vk.api.sdk.VKApiCallback
+import com.vk.sdk.api.photos.PhotosService
+import com.vk.sdk.api.photos.dto.PhotosGetAlbumsResponseDto
 
 class GalleryActivity : AppCompatActivity() {
+    private val albumsVM: AlbumsViewModel by viewModels {
+        AlbumsViewModelFactory()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
+
+        findViewById<Button>(R.id.logout_button).setOnClickListener {
+            VK.logout()
+            val newIntent = Intent(this@GalleryActivity, MainActivity::class.java)
+            newIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(newIntent)
+            finish()
+        }
 
         val picker = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
             if (uris.isNotEmpty()) {
@@ -37,23 +56,25 @@ class GalleryActivity : AppCompatActivity() {
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.justifyContent = JustifyContent.SPACE_BETWEEN
         recyclerView.layoutManager = layoutManager
-
-        val a1 = Album("Assa", 3, "12", "https://lh3.googleusercontent.com/zAp7WO22UXyLv1kkiQQLY0_hmfO94RnVt8JI1_SZbA92tX6VwC56aWOSUECaIbXx6Ak0ioGq-9Ej4OtIiRBoFHcp9Gl8SFKJakjho4yhfyTT=s0")
-        val a2 = Album("Asdad", 1, "12", "https://lh3.googleusercontent.com/zAp7WO22UXyLv1kkiQQLY0_hmfO94RnVt8JI1_SZbA92tX6VwC56aWOSUECaIbXx6Ak0ioGq-9Ej4OtIiRBoFHcp9Gl8SFKJakjho4yhfyTT=s0")
-        val a3 = Album("Bcbvb", 12, "12", "https://lh3.googleusercontent.com/zAp7WO22UXyLv1kkiQQLY0_hmfO94RnVt8JI1_SZbA92tX6VwC56aWOSUECaIbXx6Ak0ioGq-9Ej4OtIiRBoFHcp9Gl8SFKJakjho4yhfyTT=s0")
-        val a4 = Album("Jsdfdm asdnk askdj sadknjs sdasdsad", 888, "12", "https://lh3.googleusercontent.com/zAp7WO22UXyLv1kkiQQLY0_hmfO94RnVt8JI1_SZbA92tX6VwC56aWOSUECaIbXx6Ak0ioGq-9Ej4OtIiRBoFHcp9Gl8SFKJakjho4yhfyTT=s0")
-        val a5 = Album("Ofjsnsj asdfsdf Ladssd", 888, "12", "https://lh3.googleusercontent.com/zAp7WO22UXyLv1kkiQQLY0_hmfO94RnVt8JI1_SZbA92tX6VwC56aWOSUECaIbXx6Ak0ioGq-9Ej4OtIiRBoFHcp9Gl8SFKJakjho4yhfyTT=s0")
-
-        adapter.submitList(listOf(a1, a2, a3, a4, a5))
+        loadAlbums(adapter)
+        findViewById<Button>(R.id.retry_button).setOnClickListener {
+            loadAlbums(adapter)
+        }
     }
 
-    fun getPath(uri: Uri?): String? {
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = contentResolver.query(uri!!, projection, null, null, null)
-        cursor!!.moveToFirst()
-        val columnIndex = cursor.getColumnIndex(projection[0])
-        val filePath = cursor.getString(columnIndex)
-        cursor.close()
-        return filePath
+    fun loadAlbums(adapter : AlbumListAdapter) {
+        VK.execute(PhotosService().photosGetAlbums(needSystem=true, needCovers=true), object: VKApiCallback<PhotosGetAlbumsResponseDto> {
+            override fun fail(error: Exception) {
+                Snackbar.make(findViewById(R.id.retry_button), "Error while loading albums", Snackbar.LENGTH_LONG)
+                    .setAction("Retry") {
+                        loadAlbums(adapter)
+                    }
+                    .show()
+            }
+            override fun success(result: PhotosGetAlbumsResponseDto) {
+                val albums = albumsVM.parseAlbumsLoad(result)
+                adapter.submitList(albums)
+            }
+        })
     }
 }

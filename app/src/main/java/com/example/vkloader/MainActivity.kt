@@ -2,6 +2,7 @@ package com.example.vkloader
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -27,7 +28,9 @@ class MainActivity : AppCompatActivity() {
                 is VKAuthenticationResult.Failed -> onFailure(result.exception)
             }
         }
-        authLauncher.launch(arrayListOf(VKScope.PHOTOS))
+        findViewById<Button>(R.id.login_button).setOnClickListener {
+            authLauncher.launch(arrayListOf(VKScope.PHOTOS))
+        }
     }
 
     private fun onLogon() {

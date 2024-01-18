@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/login_button"
         style="@style/Widget.Material3.Button"
         app:icon="@drawable/vk_logo"
         app:iconTint="@null"

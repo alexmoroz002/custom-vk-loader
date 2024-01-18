@@ -45,7 +45,7 @@ class AlbumListAdapter(private val callback: AlbumCallback) : ListAdapter<Album,
             return oldItem == newItem
         }
         override fun areContentsTheSame(oldItem: Album, newItem: Album): Boolean {
-            return oldItem.url == newItem.url
+            return oldItem.id == newItem.id
         }
     }
 
