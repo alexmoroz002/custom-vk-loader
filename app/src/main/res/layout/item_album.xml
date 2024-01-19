@@ -14,12 +14,13 @@
             android:id="@+id/album_img"
             android:layout_width="200dp"
             android:layout_height="0dp"
+            android:contentDescription="TODO123"
             app:layout_constraintDimensionRatio="3:2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/test1" />
+            tools:srcCompat="@drawable/test_small" />
 
         <TextView
             android:id="@+id/album_title"
@@ -42,9 +43,25 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/round_background"
-            android:textColor="@color/design_default_color_on_secondary"
+            android:backgroundTint="?attr/colorPrimaryFixedDim"
+            android:textColor="?attr/colorOnPrimaryFixed"
             app:layout_constraintBottom_toBottomOf="@+id/album_img"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="12" />
+
+        <TextView
+            android:id="@+id/album_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/round_background"
+            android:backgroundTint="?attr/colorPrimary"
+            android:text="System"
+            android:textColor="?attr/colorOnPrimary"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/album_img"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

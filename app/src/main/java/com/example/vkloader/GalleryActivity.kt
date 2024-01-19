@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -25,6 +26,7 @@ class GalleryActivity : AppCompatActivity() {
     private val albumsVM: AlbumsViewModel by viewModels {
         AlbumsViewModelFactory()
     }
+    private var selectedAlbum: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
@@ -39,7 +41,16 @@ class GalleryActivity : AppCompatActivity() {
 
         val picker = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
             if (uris.isNotEmpty()) {
-                Log.d("PhotoPicker", "Item count: ${uris.size}")
+                VK.execute(PhotosPostCommand(uris, selectedAlbum), object: VKApiCallback<Int> {
+                    override fun fail(error: Exception) {
+                        Log.e("upload", error.message.toString())
+                        Log.e("upload", error.toString())
+                    }
+
+                    override fun success(result: Int) {
+                        Log.d("upload", "Saved $result photo")
+                    }
+                })
             } else {
                 Log.d("PhotoPicker", "No media selected")
             }
@@ -48,6 +59,11 @@ class GalleryActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.albums_list)
         val adapter = AlbumListAdapter(object : AlbumCallback {
             override fun onClick(album: Album) {
+                selectedAlbum = album.id
+                if (selectedAlbum < 1) {
+                    Snackbar.make(findViewById(R.id.retry_button), "Loading in system albums is prohibited", Snackbar.LENGTH_SHORT).show()
+                    return
+                }
                 picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
         })
@@ -65,7 +81,7 @@ class GalleryActivity : AppCompatActivity() {
     fun loadAlbums(adapter : AlbumListAdapter) {
         VK.execute(PhotosService().photosGetAlbums(needSystem=true, needCovers=true), object: VKApiCallback<PhotosGetAlbumsResponseDto> {
             override fun fail(error: Exception) {
-                Snackbar.make(findViewById(R.id.retry_button), "Error while loading albums", Snackbar.LENGTH_LONG)
+                Snackbar.make(findViewById(R.id.retry_button), "Error occurred while loading albums", Snackbar.LENGTH_LONG)
                     .setAction("Retry") {
                         loadAlbums(adapter)
                     }

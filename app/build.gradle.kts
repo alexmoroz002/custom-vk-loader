@@ -41,6 +41,7 @@ android {
 
 dependencies {
     ksp("com.github.bumptech.glide:ksp:4.14.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation("com.vk:android-sdk-core:4.1.0")
     implementation("com.vk:android-sdk-api:4.1.0")

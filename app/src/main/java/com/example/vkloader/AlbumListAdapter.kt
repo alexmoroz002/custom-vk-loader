@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.Target
 
 class AlbumListAdapter(private val callback: AlbumCallback) : ListAdapter<Album, AlbumListAdapter.AlbumViewHolder>(AlbumComparator()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
@@ -25,10 +26,14 @@ class AlbumListAdapter(private val callback: AlbumCallback) : ListAdapter<Album,
         private val albumTitle: TextView = itemView.findViewById(R.id.album_title)
         private val albumCount: TextView = itemView.findViewById(R.id.album_count)
         private val albumCover: ImageView = itemView.findViewById(R.id.album_img)
+        private val albumStatus: TextView = itemView.findViewById(R.id.album_status)
 
         fun bind(item: Album) {
             albumTitle.text = item.title
             albumCount.text = item.count.toString()
+            if (item.id < 1) {
+                albumStatus.visibility = View.VISIBLE
+            }
             Glide.with(itemView).load(item.coverUrl).centerCrop().into(albumCover)
         }
 
