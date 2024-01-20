@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
 
 class AlbumListAdapter(private val callback: AlbumCallback) : ListAdapter<Album, AlbumListAdapter.AlbumViewHolder>(AlbumComparator()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
@@ -33,6 +32,8 @@ class AlbumListAdapter(private val callback: AlbumCallback) : ListAdapter<Album,
             albumCount.text = item.count.toString()
             if (item.id < 1) {
                 albumStatus.visibility = View.VISIBLE
+            } else {
+                albumStatus.visibility = View.INVISIBLE
             }
             Glide.with(itemView).load(item.coverUrl).centerCrop().into(albumCover)
         }
@@ -50,7 +51,7 @@ class AlbumListAdapter(private val callback: AlbumCallback) : ListAdapter<Album,
             return oldItem == newItem
         }
         override fun areContentsTheSame(oldItem: Album, newItem: Album): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.id == newItem.id && oldItem.title == newItem.title && oldItem.count == newItem.count && oldItem.coverUrl == newItem.coverUrl
         }
     }
 
