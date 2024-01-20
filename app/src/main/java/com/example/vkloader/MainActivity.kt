@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onFailure(exception: VKAuthException) {
         Log.e("login", exception.message.toString())
-        Snackbar.make(findViewById(R.id.retry_button),
+        Snackbar.make(findViewById(R.id.login_button),
             getString(R.string.auth_failed), Snackbar.LENGTH_LONG)
             .setAction(getString(R.string.retry)) {
                 authLauncher.launch(arrayListOf(VKScope.PHOTOS))
