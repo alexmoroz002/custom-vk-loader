@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="VK Gallery Loader"
+        android:text="@string/app_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +24,7 @@
         app:iconTint="@null"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login with VK"
+        android:text="@string/login_with_vk_btn"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

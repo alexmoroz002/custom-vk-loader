@@ -1,4 +1,19 @@
 <resources>
-    <string name="app_name">VK Loader</string>
+    <string name="app_name" translatable="false">VK Loader</string>
+    <string name="gallery_title">My albums</string>
+    <string name="logout_btn">Logout</string>
+    <string name="refresh_btn">Refresh</string>
+    <string name="app_title" translatable="false">VK Gallery Loader</string>
+    <string name="login_with_vk_btn">Login with VK</string>
+    <string name="album_cover">Album cover</string>
+    <string name="system_tag">System</string>
+    <string name="permission_granted">Permission granted</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="loading_access_denied">Loading in system albums is prohibited</string>
+    <string name="album_load_error">Error occurred while loading albums</string>
+    <string name="retry">Retry</string>
+    <string name="photo_save_error">Error occurred while uploading photos</string>
+    <string name="uploaded_photo">Uploaded %1$d photo</string>
+    <string name="auth_failed">Authentication failed</string>
     <integer name="com_vk_sdk_AppId">51831071</integer>
 </resources>

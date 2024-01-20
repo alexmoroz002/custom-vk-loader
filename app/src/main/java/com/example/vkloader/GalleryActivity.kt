@@ -36,9 +36,11 @@ class GalleryActivity : AppCompatActivity() {
     }
     private val requestPermissions = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (granted) {
-            Snackbar.make(findViewById(R.id.albums_list), "Permission granted", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(findViewById(R.id.albums_list),
+                getString(R.string.permission_granted), Snackbar.LENGTH_SHORT).show()
         } else {
-            Snackbar.make(findViewById(R.id.albums_list), "Permission denied", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(findViewById(R.id.albums_list),
+                getString(R.string.permission_denied), Snackbar.LENGTH_SHORT).show()
         }
         picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
@@ -60,7 +62,8 @@ class GalleryActivity : AppCompatActivity() {
             override fun onClick(album: Album) {
                 selectedAlbum = album.id
                 if (selectedAlbum < 1) {
-                    Snackbar.make(findViewById(R.id.retry_button), "Loading in system albums is prohibited", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(findViewById(R.id.retry_button),
+                        getString(R.string.loading_access_denied), Snackbar.LENGTH_SHORT).show()
                     return
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -92,8 +95,9 @@ class GalleryActivity : AppCompatActivity() {
         VK.execute(PhotosService().photosGetAlbums(needSystem=true, needCovers=true), object: VKApiCallback<PhotosGetAlbumsResponseDto> {
             override fun fail(error: Exception) {
                 Log.e("load", error.toString())
-                Snackbar.make(findViewById(R.id.retry_button), "Error occurred while loading albums", Snackbar.LENGTH_LONG)
-                    .setAction("Retry") {
+                Snackbar.make(findViewById(R.id.retry_button),
+                    getString(R.string.album_load_error), Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.retry)) {
                         loadAlbums(adapter)
                     }
                     .show()
@@ -109,15 +113,17 @@ class GalleryActivity : AppCompatActivity() {
         VK.execute(PhotosPostCommand(uris, selectedAlbum), object: VKApiCallback<Int> {
             override fun fail(error: Exception) {
                 Log.e("upload", error.toString())
-                Snackbar.make(findViewById(R.id.albums_list), "Error occurred while uploading photos", Snackbar.LENGTH_LONG)
-                    .setAction("Retry") {
+                Snackbar.make(findViewById(R.id.albums_list),
+                    getString(R.string.photo_save_error), Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.retry)) {
                         uploadPhotos(uris)
                     }
                     .show()
             }
             override fun success(result: Int) {
                 Log.d("upload", "Saved $result photo")
-                Snackbar.make(findViewById(R.id.albums_list), "Uploaded $result photo", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(findViewById(R.id.albums_list),
+                    getString(R.string.uploaded_photo, result), Snackbar.LENGTH_SHORT).show()
             }
         })
     }

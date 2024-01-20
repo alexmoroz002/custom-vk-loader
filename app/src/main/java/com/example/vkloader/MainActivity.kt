@@ -2,6 +2,7 @@ package com.example.vkloader
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
@@ -40,8 +41,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onFailure(exception: VKAuthException) {
-        Snackbar.make(findViewById(R.id.retry_button), "Auth failed, reason: ${exception.authError}", Snackbar.LENGTH_LONG)
-            .setAction("Retry") {
+        Log.e("login", exception.message.toString())
+        Snackbar.make(findViewById(R.id.retry_button),
+            getString(R.string.auth_failed), Snackbar.LENGTH_LONG)
+            .setAction(getString(R.string.retry)) {
                 authLauncher.launch(arrayListOf(VKScope.PHOTOS))
             }.show()
     }
